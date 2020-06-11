@@ -9,7 +9,7 @@
         >
           <v-card color="primary" dark>
             <v-card-text>
-              <p>OK啦！！！</p>
+              <p>Success！！！</p>
               <v-btn color="success" :to="{name: 'hello'}" >Close</v-btn>
             </v-card-text>
           </v-card>
@@ -27,7 +27,7 @@
                   Login
                 </v-tab>
                 <v-tab class="subtitle-1 font-weight-bold" :key="2">
-                  Reset Password
+                  Unlock
                 </v-tab>
                 <v-tab-item :key="1">
                   <v-card>
@@ -40,8 +40,9 @@
                           type="text"
                           v-model="login.account"
                         />
-
-                        <v-text-field
+                        <vue-recaptcha sitekey="6Le5J6MZAAAAAFY7Yvj3jLAGRwG4gEDqaBFe0OUy">
+                        </vue-recaptcha>
+                        <!-- <v-text-field
                           id="login_password"
                           label="Password"
                           name="password"
@@ -52,7 +53,7 @@
                           :append-icon="showPassword ?
                           'visibility' : 'visibility_off'"
                           @click:append="showPassword = !showPassword"
-                        />
+                        /> -->
                       </v-form>
                     </v-card-text>
                     <v-card-actions class="justify-center">
