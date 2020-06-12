@@ -10,6 +10,22 @@ import App from './app.vue';
 Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
 Vue.component('VueRecaptcha', VueRecaptcha);
+
+axios.interceptors.request.use((config) => {
+  // config.data = JSON.stringify(config.data);
+  config.headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS',
+    'Access-Control-Max-Age': '86400',
+    'Access-Control-Content-Type':
+      'application/json;charset=utf-8',
+  };
+  const accessToken = store.getters['Authenticate/getAccessToken'];
+  if (accessToken) {
+    config.headers.common['Authorization'] = 'Bearer ' + accessToken;
+  }
+  return config;
+});
 // eslint-disable-next-line no-new
 new Vue({
   vuetify,

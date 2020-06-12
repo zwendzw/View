@@ -58,49 +58,19 @@
                     <v-card-text>
                       <v-form>
                         <v-text-field
-                          label="Account"
+                          label="ACCOUNT"
                           name="account"
                           prepend-icon="person"
                           type="text"
-                          v-model="reset.account"
+                          v-model="unlock.account"
                         />
 
                         <v-text-field
-                          id="current_password"
-                          label="Current Password"
-                          name="current_password"
+                          id="one_time_password"
+                          label="CODE"
+                          name="one_time_password"
                           prepend-icon="lock"
-                          v-model="reset.currentPassword"
-                          :type="showCurrentPassword ? 'text' : 'password'"
-                          :append-icon="showCurrentPassword ?
-                          'visibility' : 'visibility_off'"
-                          @click:append="
-                          showCurrentPassword = !showCurrentPassword"
-                        />
-
-                        <v-text-field
-                          id="new_password"
-                          label="New Password"
-                          name="new_password"
-                          prepend-icon="lock"
-                          v-model="reset.newPassword"
-                          :type="showNewPassword ? 'text' : 'password'"
-                          :append-icon="showNewPassword ?
-                          'visibility' : 'visibility_off'"
-                          @click:append="showNewPassword = !showNewPassword"
-                        />
-
-                        <v-text-field
-                          id="confirm_new_password"
-                          label="Confirm"
-                          name="confirm_new_password"
-                          prepend-icon="lock"
-                          v-model="reset.confirmNewPassword"
-                          :type="showconfirmNewPassword ? 'text' : 'password'"
-                          :append-icon="showconfirmNewPassword ?
-                          'visibility' : 'visibility_off'"
-                          @click:append="
-                          showconfirmNewPassword = !showconfirmNewPassword"
+                          v-model="unlock.oneTimePassword"
                         />
                       </v-form>
                     </v-card-text>
@@ -108,9 +78,9 @@
                       <v-btn
                         id="login"
                         color="ncb-yellow"
-                        @click="resetPassword"
+                        @click="unlockAccount"
                       >
-                        Reset
+                        Unlock
                       </v-btn>
                       <v-dialog
                         v-model="dialog.resetPassword"
@@ -144,10 +114,6 @@
 export default {
   data() {
     return {
-      showPassword: false,
-      showCurrentPassword: false,
-      showNewPassword: false,
-      showconfirmNewPassword: false,
       dialog: {
         resetPassword: false,
         resetSuccess: false,
@@ -155,20 +121,14 @@ export default {
       apply: {
         account: '',
       },
-      reset: {
+      unlock: {
         account: '',
-        currentPassword: '',
-        newPassword: '',
-        confirmNewPassword: '',
+        token: '',
+        oneTimePassword: '',
       },
     };
   },
   props: {},
-  computed: {
-    getToken() {
-      return this.$store.getters.ApplyForOtp.getToken;
-    },
-  },
   methods: {
     async applyForOTP(event) {
       await this.$store.dispatch('ApplyForOtp/apply', {
@@ -182,23 +142,20 @@ export default {
           },
       );
     },
-    async resetPassword(event) {
-      if (this.newPassword !== this.confirmNewPassword) {
-        return;
-      }
-      this.dialog.resetPassword = true;
+    async unlockAccount(event) {
+      // this.dialog.resetPassword = true;
       await this.$store
-          .dispatch('Auth/changePassword', {
-            account: this.reset.account,
-            currentPassword: this.reset.currentPassword,
-            newPassword: this.reset.newPassword,
+          .dispatch('Unlock/unlockAccount', {
+            account: this.unlock.account,
+            oneTimePassword: this.unlock.oneTimePassword,
           })
           .then(
               (result) => {
-                setTimeout(() => {
-                  this.dialog.resetPassword = false;
-                  this.dialog.resetSuccess = true;
-                }, 1000);
+                console.log('test1');
+                // setTimeout(() => {
+                //   this.dialog.resetPassword = false;
+                //   this.dialog.resetSuccess = true;
+                // }, 1000);
               },
               (error) => {
                 this.dialog.resetPassword = false;
