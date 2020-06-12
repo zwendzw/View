@@ -24,7 +24,7 @@
                 slider-color="grey darken-3"
               >
                 <v-tab class="subtitle-1 font-weight-bold" :key="1">
-                  Login
+                  Apply
                 </v-tab>
                 <v-tab class="subtitle-1 font-weight-bold" :key="2">
                   Unlock
@@ -38,27 +38,17 @@
                           name="account"
                           prepend-icon="person"
                           type="text"
-                          v-model="login.account"
+                          v-model="apply.account"
                         />
-                        <vue-recaptcha sitekey="6Le5J6MZAAAAAFY7Yvj3jLAGRwG4gEDqaBFe0OUy">
-                        </vue-recaptcha>
-                        <!-- <v-text-field
-                          id="login_password"
-                          label="Password"
-                          name="password"
-                          prepend-icon="lock"
-                          v-model="login.password"
-                          :type="showPassword ?
-                          'text' : 'password'"
-                          :append-icon="showPassword ?
-                          'visibility' : 'visibility_off'"
-                          @click:append="showPassword = !showPassword"
-                        /> -->
+                        <!-- <vue-recaptcha sitekey="
+                          6Le5J6MZAAAAAFY7Yvj3jLAGRwG4gEDqaBFe0OUy
+                        ">
+                        </vue-recaptcha> -->
                       </v-form>
                     </v-card-text>
                     <v-card-actions class="justify-center">
-                      <v-btn id="login" color="ncb-yellow" @click="login">
-                        Login
+                      <v-btn id="apply" color="ncb-yellow" @click="applyForOTP">
+                        Apply
                       </v-btn>
                     </v-card-actions>
                   </v-card>
@@ -162,9 +152,8 @@ export default {
         resetPassword: false,
         resetSuccess: false,
       },
-      login: {
+      apply: {
         account: '',
-        password: '',
       },
       reset: {
         account: '',
@@ -175,7 +164,24 @@ export default {
     };
   },
   props: {},
+  computed: {
+    getToken() {
+      return this.$store.getters.ApplyForOtp.getToken;
+    },
+  },
   methods: {
+    async applyForOTP(event) {
+      await this.$store.dispatch('ApplyForOtp/apply', {
+        account: this.apply.account,
+      }).then(
+          (result) => {
+            console.log('result', this);
+          },
+          (error) => {
+            console.log('error', error);
+          },
+      );
+    },
     async resetPassword(event) {
       if (this.newPassword !== this.confirmNewPassword) {
         return;
