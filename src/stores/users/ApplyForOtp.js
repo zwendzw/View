@@ -3,50 +3,35 @@ import axios from 'axios';
 export default {
   namespaced: true,
   state: {
-    token: '',
+    OtpSn: '',
   },
   actions: {
-    apply({commit}, {account}) {
-      console.log(account);
-      return new Promise((resolve, reject) => {
-        // commit('setToken', 'dbdbb60a89e640ed8f5a34da8d58f82f');
-        // resolve(true);
-        axios.get(`http://mis.nextbank.com.tw/api/otp/apply/${account}`)
-            .then((response) => {
-              commit('setToken', response.data.data);
-              resolve(true);
-            }).catch((error) => {
-              const response = error.response || {};
-              reject(response.data || {});
-            });
-      });
-    },
-    changePassword({commit}, {account, currentPassword, newPassword}) {
-      console.log(account, currentPassword, newPassword);
-      return new Promise((resolve, reject) => {
-        axios.put('http://localhost:3000/password', {
-          account,
-          currentPassword,
-          newPassword,
-        }).then((response) => {
-          if (response.status && response.status === 200) {
-            resolve(true);
-          }
-        }).catch((error) => {
-          const response = error.response || {};
-          reject(response.data || {});
-        });
-      });
+    async apply({commit}, {account}) {
+      try {
+        const result = await axios.get(`/api/otp/apply/${account}`);
+        const otpSn = result.data.data || '';
+        const respone = result.data.message || '';
+        if (result.data.status === 1) {
+          commit('setSn', otpSn);
+          window.sessionStorage.setItem('setSn', 'otpSn');
+          window.sessionStorage.setItem('count', 'otpSn');
+        } return (respone);
+        window.sessionStorage.setItem(set);
+      } catch (error) {
+        const response = error.response || {};
+        console.log(response);
+        return (response);
+      }
     },
   },
   mutations: {
-    setToken(state, data) {
-      state.token = data;
+    setSn(state, data) {
+      state.OtpSn = data;
     },
   },
   getters: {
-    getToken(state) {
-      return state.token;
+    getSn(state) {
+      return state.OtpSn;
     },
   },
 };

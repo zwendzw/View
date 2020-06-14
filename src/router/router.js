@@ -1,8 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import userPage from '../pages/user.vue';
-import helloPage from '../pages/hello.vue';
-
+import unlockPage from '../pages/unlock.vue';
 
 Vue.use(VueRouter);
 
@@ -20,9 +19,9 @@ export default new VueRouter({
       component: userPage,
     },
     {
-      path: '/hello',
-      name: 'hello',
-      component: helloPage,
+      path: '/unlock',
+      name: 'unlock',
+      component: unlockPage,
     },
   ],
 });
