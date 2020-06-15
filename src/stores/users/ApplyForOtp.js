@@ -19,11 +19,10 @@ export default {
             account
           }
           commit('setSn', commitData);
-          // set sessionStorage {optSn, account}
           window.sessionStorage.setItem('otpSn', otpSn);
           window.sessionStorage.setItem('account', account);
-        } return (respone);
-        window.sessionStorage.setItem(set);
+          window.sessionStorage.setItem('timestamp', new Date().getTime());
+        } return (status);
       } catch (error) {
         const response = error.response || {};
         console.log(response);

@@ -8,10 +8,23 @@
           persistent
           width="300"
         >
-          <v-card color="primary" dark>
+          <v-card color="ncb-gery" dark>
             <v-card-text>
               <p>{{dialog.errorMessage}}</p>
-              <v-btn color="success" :to="{name: 'hello'}" >Close</v-btn>
+              <v-btn color="warning" @click="dialog.errorDialog = false">Close</v-btn>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+        <!-- successDialog Begin -->
+        <v-dialog
+          v-model="dialog.successDialog"
+          persistent
+          width="300"
+        >
+          <v-card color="ncb-gery" dark>
+            <v-card-text>
+              <p>{{dialog.successMessage}}</p>
+              <v-btn color="success" @click="dialog.successDialog = false">Close</v-btn>
             </v-card-text>
           </v-card>
         </v-dialog>
@@ -100,6 +113,7 @@ export default {
       dialog: {
         processingBar: false,
         errorDialog: false,
+        successDialog: false,
         errorMessage: '',
       },
       unlock: {
@@ -139,7 +153,7 @@ export default {
           })
           .then(
               (result) => {
-                if (!result) {
+                if (result !== '1') {
                   setTimeout(() => {
                     this.dialog.processingBar = false;
                     this.dialog.errorDialog = true;
@@ -148,7 +162,8 @@ export default {
                 }
                 setTimeout(() => {
                   this.dialog.processingBar = false;
-                  this.dialog.errorDialog = true;
+                  this.dialog.successDialog = true;
+                  this.dialog.successMessage = 'success'
                 }, 1000);
               },
               (error) => {
