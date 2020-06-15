@@ -6,6 +6,7 @@ import unlockPage from '../pages/unlock.vue';
 Vue.use(VueRouter);
 
 export default new VueRouter({
+  mode: 'history',
   routes: [
     {
       path: '/',

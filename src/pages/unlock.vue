@@ -52,8 +52,8 @@
                     prepend-icon="person"
                     type="text"
                     v-model="unlock.account"
+                    :disabled="unlock.account.length > 0"
                   />
-
                   <v-text-field
                     id="one_time_password"
                     label="CODE"
@@ -65,10 +65,9 @@
               </v-card-text>
               <v-card-actions class="justify-space-around">
                 <v-btn
-                  v-if="enableTime > 0"
+                  v-if="enableTime > 1"
                   color="ncb-gery"
                   :disabled="!resendEnable"
-                  @click="unlockAccount"
                 >
                   Back({{ enableTime }})
                 </v-btn>
@@ -76,7 +75,7 @@
                   v-else
                   color="ncb-gery"
                   :disabled="!resendEnable"
-                  @click="unlockAccount"
+                  @click="back"
                 >
                   Back
                 </v-btn>
@@ -108,16 +107,21 @@ export default {
         otpCode: '',
       },
       resendEnable: false,
-      enableTime: 60,
+      enableTime: 3,
     };
   },
   created() {
     this.enable();
+    this.unlock.account = this.$store.getters['ApplyForOtp/getAccount'];
   },
   methods: {
+    back() {
+      this.$router.replace({
+        name: 'user',
+      });
+    },
     enable() {
       const enableTimer = setInterval(() => {
-        console.log('a', this.enableTime);
         if (this.enableTime > 0) {
           this.enableTime--;
         } else {
