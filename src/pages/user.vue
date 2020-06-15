@@ -2,18 +2,6 @@
   <v-app id="inspire">
     <v-content>
       <v-container class="fill-height" fluid>
-        <v-dialog
-          v-model="dialog.errorDialog"
-          persistent
-          width="300"
-        >
-          <v-card color="primary" dark>
-            <v-card-text>
-              <p>{{dialog.errorMessage}}</p>
-              <v-btn color="success" :to="{name: 'hello'}" >Close</v-btn>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
         <v-row align="center" justify="center">
           <v-col cols="12" sm="8" md="4">
             <v-card class="elevation-12">
