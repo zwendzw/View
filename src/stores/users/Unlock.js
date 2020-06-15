@@ -9,40 +9,37 @@ export default {
   },
   actions: {
     async unlockAccount({commit}, {account, otpCode}) {
-      // OtpSn = this.getters['ApplyForOtp/getSn'];
-      OtpSn = '060e168c820a4d979e531b090171d1e5';
+      OtpSn = this.getters['ApplyForOtp/getSn'];
+      // OtpSn = '060e168c820a4d979e531b090171d1e5';
       console.log(
           account,
           otpCode,
           OtpSn,
       );
       try {
-        const result = {
-          'data': {
-            'status': '-99',
-            'message': 'OTP Code is Unavailable.',
-            'data': null,
-          },
-          'status': 200,
-        };
         // const result = {
         //   'data': {
-        //     'status': '1',
-        //     'message': 'success',
-        //     'data': true,
+        //     'status': '-99',
+        //     'message': 'OTP Code is Unavailable.',
+        //     'data': null,
         //   },
+        //   'status': 200,
         // };
+        const result = {
+          'data': {
+            'status': '1',
+            'message': 'success',
+            'data': true,
+          },
+        };
         // const result = await axios.post('api/user/unlock', {
         //   account,
         //   OtpSn,
         //   otpCode,
         // });
-        const response = result.data.message;
-        console.log(response);
-        if (result.data.status === 1) {
-          console.log(response);
-          return true;
-        } return false;
+        const status = result.data.status;
+        // const response = result.data.message;
+        return status
       } catch (error) {
         const response = error.response || {};
         console.log(response);

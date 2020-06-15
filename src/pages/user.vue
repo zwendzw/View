@@ -12,7 +12,7 @@
                 font-weight-bold
                 justify-center
               ">
-                Apply
+                APPLY
               </v-card-title>
                 <v-card-text>
                   <v-form>
@@ -42,6 +42,9 @@
 export default {
   data() {
     return {
+      applyEnable: true,
+      enableTime: '',
+      countDownTimer: 3000,
       dialog: {
         processingBar: false,
         errorDialog: false,
@@ -52,15 +55,27 @@ export default {
       },
     };
   },
+  created: {
+    enableTime: window.sessionStorage.getItem('time'),
+  },
   methods: {
+    checkCountDownTimer() {
+      dateTimeNow = Date.now;
+      console.log(dateTimeNow, enableTime);
+    },
     applyForOtp(event) {
+      this.checkCountDownTimer()
       this.$store.dispatch('ApplyForOtp/apply', {
         account: this.apply.account,
       }).then((result) => {
         console.log('result', result);
-        this.$router.replace({
-          name: 'unlock',
-        });
+        if (result === '1') {
+          this.$router.replace({
+            name: 'unlock',
+          });
+        } else {
+          console.log(result);
+        }
       });
     },
   },

@@ -8,10 +8,23 @@
           persistent
           width="300"
         >
-          <v-card color="primary" dark>
+          <v-card color="ncb-gery" dark>
             <v-card-text>
               <p>{{dialog.errorMessage}}</p>
-              <v-btn color="success" :to="{name: 'hello'}" >Close</v-btn>
+              <v-btn color="warning" @click="dialog.errorDialog = false">Close</v-btn>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+        <!-- successDialog Begin -->
+        <v-dialog
+          v-model="dialog.successDialog"
+          persistent
+          width="300"
+        >
+          <v-card color="ncb-gery" dark>
+            <v-card-text>
+              <p>{{dialog.successMessage}}</p>
+              <v-btn color="success" @click="dialog.successDialog = false">Close</v-btn>
             </v-card-text>
           </v-card>
         </v-dialog>
@@ -52,8 +65,8 @@
                     prepend-icon="person"
                     type="text"
                     v-model="unlock.account"
+                    :disabled="unlock.account.length > 0"
                   />
-
                   <v-text-field
                     id="one_time_password"
                     label="CODE"
@@ -65,10 +78,9 @@
               </v-card-text>
               <v-card-actions class="justify-space-around">
                 <v-btn
-                  v-if="enableTime > 0"
+                  v-if="enableTime > 1"
                   color="ncb-gery"
                   :disabled="!resendEnable"
-                  @click="unlockAccount"
                 >
                   Back({{ enableTime }})
                 </v-btn>
@@ -76,7 +88,7 @@
                   v-else
                   color="ncb-gery"
                   :disabled="!resendEnable"
-                  @click="unlockAccount"
+                  @click="back"
                 >
                   Back
                 </v-btn>
@@ -101,6 +113,7 @@ export default {
       dialog: {
         processingBar: false,
         errorDialog: false,
+        successDialog: false,
         errorMessage: '',
       },
       unlock: {
@@ -108,16 +121,21 @@ export default {
         otpCode: '',
       },
       resendEnable: false,
-      enableTime: 60,
+      enableTime: 3,
     };
   },
   created() {
     this.enable();
+    this.unlock.account = this.$store.getters['ApplyForOtp/getAccount'];
   },
   methods: {
+    back() {
+      this.$router.replace({
+        name: 'user',
+      });
+    },
     enable() {
       const enableTimer = setInterval(() => {
-        console.log('a', this.enableTime);
         if (this.enableTime > 0) {
           this.enableTime--;
         } else {
@@ -135,7 +153,7 @@ export default {
           })
           .then(
               (result) => {
-                if (!result) {
+                if (result !== '1') {
                   setTimeout(() => {
                     this.dialog.processingBar = false;
                     this.dialog.errorDialog = true;
@@ -144,7 +162,8 @@ export default {
                 }
                 setTimeout(() => {
                   this.dialog.processingBar = false;
-                  this.dialog.errorDialog = true;
+                  this.dialog.successDialog = true;
+                  this.dialog.successMessage = 'success'
                 }, 1000);
               },
               (error) => {

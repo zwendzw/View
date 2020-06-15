@@ -4,6 +4,15 @@ export default {
   namespaced: true,
   state: {},
   actions: {
+    applyForOTP({commit}, {account}) {
+      return new Promise((resolve, reject) => {
+        axios.get(
+          `http://mis.nextbank.com.tw/api/otp/apply/${account}`
+          ).then((response) => {
+            console.log(response);
+          })
+      })
+    },
     changePassword({commit}, {account, currentPassword, newPassword}) {
       console.log(account, currentPassword, newPassword);
       return new Promise((resolve, reject) => {

@@ -3,7 +3,8 @@ import axios from 'axios';
 export default {
   namespaced: true,
   state: {
-    OtpSn: '',
+    otpSn: '',
+    account: '',
   },
   actions: {
     async apply({commit}, {account}) {
@@ -11,12 +12,17 @@ export default {
         const result = await axios.get(`/api/otp/apply/${account}`);
         const otpSn = result.data.data || '';
         const respone = result.data.message || '';
-        if (result.data.status === 1) {
-          commit('setSn', otpSn);
-          window.sessionStorage.setItem('setSn', 'otpSn');
-          window.sessionStorage.setItem('count', 'otpSn');
-        } return (respone);
-        window.sessionStorage.setItem(set);
+        const status = result.data.status || '-999';
+        if (status === '1') { // Error Code is String.
+          const commitData = {
+            otpSn, 
+            account
+          }
+          commit('setSn', commitData);
+          window.sessionStorage.setItem('otpSn', otpSn);
+          window.sessionStorage.setItem('account', account);
+          window.sessionStorage.setItem('timestamp', new Date().getTime());
+        } return (status);
       } catch (error) {
         const response = error.response || {};
         console.log(response);
@@ -26,12 +32,17 @@ export default {
   },
   mutations: {
     setSn(state, data) {
-      state.OtpSn = data;
+      console.log('commit1', data);
+      state.otpSn = data.otpSn;
+      state.account = data.account;
     },
   },
   getters: {
     getSn(state) {
-      return state.OtpSn;
+      return state.otpSn;
+    },
+    getAccount(state) {
+      return state.account;
     },
   },
 };
