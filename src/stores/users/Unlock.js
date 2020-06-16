@@ -39,7 +39,7 @@ export default {
         // });
         const status = result.data.status;
         // const response = result.data.message;
-        return status
+        return status;
       } catch (error) {
         const response = error.response || {};
         console.log(response);

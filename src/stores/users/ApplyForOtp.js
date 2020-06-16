@@ -11,17 +11,16 @@ export default {
       try {
         const result = await axios.get(`/api/otp/apply/${account}`);
         const otpSn = result.data.data || '';
-        const respone = result.data.message || '';
         const status = result.data.status || '-999';
+        console.log('time', Date.parse(new Date()));
         if (status === '1') { // Error Code is String.
           const commitData = {
-            otpSn, 
-            account
-          }
+            otpSn,
+            account,
+          };
           commit('setSn', commitData);
           window.sessionStorage.setItem('otpSn', otpSn);
           window.sessionStorage.setItem('account', account);
-          window.sessionStorage.setItem('timestamp', new Date().getTime());
         } return (status);
       } catch (error) {
         const response = error.response || {};

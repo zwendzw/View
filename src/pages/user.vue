@@ -43,7 +43,7 @@ export default {
   data() {
     return {
       applyEnable: true,
-      enableTime: '',
+      enableTime: 0,
       countDownTimer: 3000,
       dialog: {
         processingBar: false,
@@ -55,16 +55,32 @@ export default {
       },
     };
   },
-  created: {
-    enableTime: window.sessionStorage.getItem('time'),
+  created() {
+    this.getEnableTime();
   },
   methods: {
+    getEnableTime() {
+      this.enableTime = Number(window.sessionStorage.getItem('timestamp'));
+    },
+    setEnabelTime() {
+      window.sessionStorage.setItem('timestamp', Date.parse(new Date()));
+    },
     checkCountDownTimer() {
-      dateTimeNow = Date.now;
-      console.log(dateTimeNow, enableTime);
+      const dateTimeNow = Date.parse(new Date());
+      this.getEnableTime();
+      if (this.enableTime === 0) {
+        this.setEnabelTime();
+      } else {
+        const timeDiff = dateTimeNow - this.enableTime;
+        if (timeDiff > this.countDownTimer) {
+          console.log(
+              dateTimeNow,
+              this.enableTime, timeDiff);
+        }
+      }
     },
     applyForOtp(event) {
-      this.checkCountDownTimer()
+      this.checkCountDownTimer();
       this.$store.dispatch('ApplyForOtp/apply', {
         account: this.apply.account,
       }).then((result) => {

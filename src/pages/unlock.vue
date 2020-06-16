@@ -11,7 +11,11 @@
           <v-card color="ncb-gery" dark>
             <v-card-text>
               <p>{{dialog.errorMessage}}</p>
-              <v-btn color="warning" @click="dialog.errorDialog = false">Close</v-btn>
+              <v-btn color="warning"
+                @click="dialog.errorDialog = false"
+              >
+                Close
+              </v-btn>
             </v-card-text>
           </v-card>
         </v-dialog>
@@ -24,7 +28,11 @@
           <v-card color="ncb-gery" dark>
             <v-card-text>
               <p>{{dialog.successMessage}}</p>
-              <v-btn color="success" @click="dialog.successDialog = false">Close</v-btn>
+              <v-btn color="success"
+                @click="dialog.successDialog = false"
+              >
+                Close
+              </v-btn>
             </v-card-text>
           </v-card>
         </v-dialog>
@@ -163,7 +171,7 @@ export default {
                 setTimeout(() => {
                   this.dialog.processingBar = false;
                   this.dialog.successDialog = true;
-                  this.dialog.successMessage = 'success'
+                  this.dialog.successMessage = 'success';
                 }, 1000);
               },
               (error) => {
