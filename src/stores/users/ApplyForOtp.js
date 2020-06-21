@@ -9,7 +9,14 @@ export default {
   actions: {
     async apply({commit}, {account}) {
       try {
-        const result = await axios.get(`/api/otp/apply/${account}`);
+        const result = {
+          "data": {
+            "status": "1",
+            "message": "success",
+            "data": "e7f00987272e43af9c7aeb6b5e165ade"
+          }
+        };
+        // const result = await axios.get(`/api/otp/apply/${account}`);
         const otpSn = result.data.data || '';
         const status = result.data.status || '-999';
         console.log('time', Date.parse(new Date()));

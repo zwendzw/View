@@ -1,12 +1,13 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import userPage from '../pages/user.vue';
+import helloPage from '../pages/hello.vue';
 import unlockPage from '../pages/unlock.vue';
 
 Vue.use(VueRouter);
 
 export default new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   routes: [
     {
       path: '/',
@@ -23,6 +24,11 @@ export default new VueRouter({
       path: '/unlock',
       name: 'unlock',
       component: unlockPage,
+    },
+    {
+      path: '/hello',
+      name: 'hello',
+      component: helloPage,
     },
   ],
 });

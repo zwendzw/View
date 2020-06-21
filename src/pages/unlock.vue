@@ -75,14 +75,23 @@
                     v-model="unlock.account"
                     :disabled="unlock.account.length > 0"
                   />
-                  <v-text-field
+                  
+                  <!-- <v-text-field
                     id="one_time_password"
                     label="CODE"
                     name="one_time_password"
                     prepend-icon="lock"
                     v-model="unlock.otpCode"
-                  />
+                  /> -->
                 </v-form>
+
+                <div class="text-center">
+                  <PincodeInput
+                    v-model="unlock.otpCode"
+                    placeholder="0"
+                    :length="6"
+                  />
+                </div>
               </v-card-text>
               <v-card-actions class="justify-space-around">
                 <v-btn
@@ -168,11 +177,14 @@ export default {
                     this.dialog.errorMessage = 'error';
                   }, 1000);
                 }
-                setTimeout(() => {
-                  this.dialog.processingBar = false;
-                  this.dialog.successDialog = true;
-                  this.dialog.successMessage = 'success';
-                }, 1000);
+                this.$router.replace({
+                  name: 'hello',
+                });
+                // setTimeout(() => {
+                //   this.dialog.processingBar = false;
+                //   this.dialog.successDialog = true;
+                //   this.dialog.successMessage = 'success';
+                // }, 1000);
               },
               (error) => {
                 this.dialog.processingBar = false;
