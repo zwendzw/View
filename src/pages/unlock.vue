@@ -5,27 +5,45 @@
         <!-- errorDialog Begin -->
         <v-dialog
           v-model="dialog.errorDialog"
-          persistent
           width="300"
         >
-          <v-card color="ncb-gery" dark>
+          <v-card color="grey lighten-5">
+            <v-card-title primary-title color="red lighten-5">
+              Error
+            </v-card-title>
             <v-card-text>
-              <p>{{dialog.errorMessage}}</p>
-              <v-btn color="warning"
+              {{dialog.errorMessage}}
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="deep-orange darken-3"
+                text
                 @click="dialog.errorDialog = false"
               >
-                Close
+                <svg class="bi bi-x" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                  d="M11.854 4.146a.5.5 0 0 1 0
+                    .708l-7
+                    7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1
+                    .708 0z"/>
+                <path fill-rule="evenodd"
+                  d="M4.146 4.146a.5.5 0 0 0 0
+                  .708l7 7a.5.5 0 0 0
+                  .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>
+              </svg>
               </v-btn>
-            </v-card-text>
+            </v-card-actions>
           </v-card>
         </v-dialog>
+        <!-- error dialog end -->
         <!-- successDialog Begin -->
         <v-dialog
           v-model="dialog.successDialog"
           persistent
           width="300"
         >
-          <v-card color="ncb-gery" dark>
+          <v-card color="ncb-dark" dark>
             <v-card-text>
               <p>{{dialog.successMessage}}</p>
               <v-btn color="success"
@@ -75,7 +93,6 @@
                     v-model="unlock.account"
                     :disabled="unlock.account.length > 0"
                   />
-                  
                   <!-- <v-text-field
                     id="one_time_password"
                     label="CODE"
@@ -95,19 +112,19 @@
               </v-card-text>
               <v-card-actions class="justify-space-around">
                 <v-btn
-                  v-if="enableTime > 1"
-                  color="ncb-gery"
+                  v-if="enableTime <= 0"
+                  color="gery lighten-5"
                   :disabled="!resendEnable"
+                  @click="resend"
                 >
-                  Back({{ enableTime }})
+                  Resend
                 </v-btn>
                 <v-btn
                   v-else
-                  color="ncb-gery"
+                  color="gery"
                   :disabled="!resendEnable"
-                  @click="back"
                 >
-                  Back
+                  Resend({{ enableTime }})
                 </v-btn>
                 <v-btn
                   color="ncb-yellow"
@@ -128,9 +145,7 @@ export default {
   data() {
     return {
       dialog: {
-        processingBar: false,
         errorDialog: false,
-        successDialog: false,
         errorMessage: '',
       },
       unlock: {
@@ -143,9 +158,27 @@ export default {
   },
   created() {
     this.enable();
-    this.unlock.account = this.$store.getters['ApplyForOtp/getAccount'];
+    this.unlock.account = this.$store.getters['ApplyForOtp/getAccount'] ||
+      window.sessionStorage.getItem('account');
   },
   methods: {
+    resend() {
+      this.resendEnable = false;
+      this.$store.dispatch('ApplyForOtp/apply', {
+      }).then((result) => {
+        console.log('result', result);
+        if (result === '1') {
+          this.enableTime = 60;
+          this.enable();
+          // 成功後重新倒數時間
+        } else {
+          // 失敗後重新倒數，並跳出提示字
+          this.dialog.errorDialog = true;
+          this.dialog.errorMessage = 'Too much requests in a while.';
+          console.log(result);
+        }
+      });
+    },
     back() {
       this.$router.replace({
         name: 'user',
@@ -170,21 +203,21 @@ export default {
           })
           .then(
               (result) => {
-                if (result !== '1') {
-                  setTimeout(() => {
-                    this.dialog.processingBar = false;
-                    this.dialog.errorDialog = true;
-                    this.dialog.errorMessage = 'error';
-                  }, 1000);
+                if (result === '1') {
+                  this.$router.replace({
+                    name: 'hello',
+                  });
+                } if (result === '0') {
+                  this.dialog.errorDialog = true;
+                  this.dialog.errorMessage = 'Unlock Failed';
+                } if (result === '-99') {
+                  this.$router.replace({
+                    name: 'error',
+                  });
+                } else {
+                  this.dialog.errorDialog = true;
+                  this.dialog.errorMessage = 'Error';
                 }
-                this.$router.replace({
-                  name: 'hello',
-                });
-                // setTimeout(() => {
-                //   this.dialog.processingBar = false;
-                //   this.dialog.successDialog = true;
-                //   this.dialog.successMessage = 'success';
-                // }, 1000);
               },
               (error) => {
                 this.dialog.processingBar = false;

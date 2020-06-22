@@ -25,18 +25,18 @@ export default {
         //   },
         //   'status': 200,
         // };
-        const result = {
-          'data': {
-            'status': '1',
-            'message': 'success',
-            'data': true,
-          },
-        };
-        // const result = await axios.post('api/user/unlock', {
-        //   account,
-        //   OtpSn,
-        //   otpCode,
-        // });
+        // const result = {
+        //   'data': {
+        //     'status': '1',
+        //     'message': 'success',
+        //     'data': true,
+        //   },
+        // };
+        const result = await axios.post('api/user/unlock', {
+          account,
+          OtpSn,
+          otpCode,
+        });
         const status = result.data.status;
         // const response = result.data.message;
         return status;

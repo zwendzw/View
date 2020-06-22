@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import userPage from '../pages/user.vue';
 import helloPage from '../pages/hello.vue';
+import errorPage from '../pages/error.vue';
 import unlockPage from '../pages/unlock.vue';
 
 Vue.use(VueRouter);
@@ -29,6 +30,11 @@ export default new VueRouter({
       path: '/hello',
       name: 'hello',
       component: helloPage,
+    },
+    {
+      path: '/error',
+      name: 'error',
+      component: errorPage,
     },
   ],
 });

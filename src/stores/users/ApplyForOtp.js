@@ -7,19 +7,33 @@ export default {
     account: '',
   },
   actions: {
-    async apply({commit}, {account}) {
+    async setAccount({commit}, {account}) {
+      window.sessionStorage.setItem('account', account);
+    },
+    async getAccount({commit, dispatch}) {
+      const account = window.sessionStorage.getItem('account') || '';
+      return account;
+    },
+    async apply({commit}) {
+      const account = window.sessionStorage.getItem('account') || '';
+      if (!account || account === '') {
+        return ('Account not found');
+      }
       try {
-        const result = {
-          "data": {
-            "status": "1",
-            "message": "success",
-            "data": "e7f00987272e43af9c7aeb6b5e165ade"
-          }
-        };
-        // const result = await axios.get(`/api/otp/apply/${account}`);
+        console.log(account);
+        // const result = {
+        // 'data': {
+        //   'status': '1',
+        //   'message': 'success',
+        //   'data': 'e7f00987272e43af9c7aeb6b5e165ade',
+        // 'status': '-999',
+        // 'message': 'Too much requests in a while.',
+        // 'data': '',
+        //   },
+        // };
+        const result = await axios.get(`/api/otp/apply/${account}`);
         const otpSn = result.data.data || '';
         const status = result.data.status || '-999';
-        console.log('time', Date.parse(new Date()));
         if (status === '1') { // Error Code is String.
           const commitData = {
             otpSn,
@@ -27,7 +41,6 @@ export default {
           };
           commit('setSn', commitData);
           window.sessionStorage.setItem('otpSn', otpSn);
-          window.sessionStorage.setItem('account', account);
         } return (status);
       } catch (error) {
         const response = error.response || {};
@@ -37,6 +50,9 @@ export default {
     },
   },
   mutations: {
+    setAccount(state, account) {
+      state.account = account;
+    },
     setSn(state, data) {
       console.log('commit1', data);
       state.otpSn = data.otpSn;
