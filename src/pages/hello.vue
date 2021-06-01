@@ -12,7 +12,7 @@
                 font-weight-bold
                 justify-center
               ">
-                SUCCSSS
+                解鎖成功！
               </v-card-title>
               <v-card-text class="text-center">
                 <svg class="bi bi-hand-thumbs-up" width="5em" height="5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

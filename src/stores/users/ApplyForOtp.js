@@ -21,16 +21,6 @@ export default {
       }
       try {
         console.log(account);
-        // const result = {
-        // 'data': {
-        //   'status': '1',
-        //   'message': 'success',
-        //   'data': 'e7f00987272e43af9c7aeb6b5e165ade',
-        // 'status': '-999',
-        // 'message': 'Too much requests in a while.',
-        // 'data': '',
-        //   },
-        // };
         const result = await axios.get(`/api/otp/apply/${account}`);
         const otpSn = result.data.data || '';
         const status = result.data.status || '-999';

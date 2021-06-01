@@ -126,7 +126,9 @@ export default {
           });
         } if (result === '-999') {
           this.dialog.errorDialog = true;
-          this.dialog.errorMessage = 'Too much requests in a while.';
+          // --- Error message 請調整爲 component!
+          this.dialog.errorMessage = '請求次數過多，請稍候再試';
+          // ---
           console.log('error', this.dialog.errorDialog);
         } else {
           this.dialog.errorDialog = true;

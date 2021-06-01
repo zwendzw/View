@@ -9,7 +9,7 @@
         >
           <v-card color="grey lighten-5">
             <v-card-title primary-title color="red lighten-5">
-              Error
+              驗證錯誤！
             </v-card-title>
             <v-card-text>
               {{dialog.errorMessage}}
@@ -146,7 +146,7 @@ export default {
     return {
       dialog: {
         errorDialog: false,
-        errorMessage: '',
+        errorMessage: 'Fail',
       },
       unlock: {
         account: '',
@@ -174,7 +174,7 @@ export default {
         } else {
           // 失敗後重新倒數，並跳出提示字
           this.dialog.errorDialog = true;
-          this.dialog.errorMessage = 'Too much requests in a while.';
+          this.dialog.errorMessage = '請求次數過多，請稍候再試';
           console.log(result);
         }
       });
@@ -195,7 +195,6 @@ export default {
       }, 1000);
     },
     async unlockAccount(event) {
-      this.dialog.processingBar = true;
       await this.$store
           .dispatch('Unlock/unlockAccount', {
             account: this.unlock.account,
@@ -209,14 +208,14 @@ export default {
                   });
                 } if (result === '0') {
                   this.dialog.errorDialog = true;
-                  this.dialog.errorMessage = 'Unlock Failed';
+                  this.dialog.errorMessage = '解鎖失敗';
                 } if (result === '-99') {
                   this.$router.replace({
                     name: 'error',
                   });
                 } else {
                   this.dialog.errorDialog = true;
-                  this.dialog.errorMessage = 'Error';
+                  this.dialog.errorMessage = '驗證失敗';
                 }
               },
               (error) => {

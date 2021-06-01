@@ -13,7 +13,7 @@ Vue.use(VueAxios, axios);
 Vue.component('VueRecaptcha', VueRecaptcha);
 Vue.component('PincodeInput', PincodeInput);
 
-axios.defaults.baseURL = 'http://mis.nextbank.com.tw/';
+axios.defaults.baseURL = 'http://127.0.0.1:3000/';
 axios.interceptors.request.use((config) => {
   const accessToken = store.getters['Authenticate/getAccessToken'];
   if (accessToken) {
